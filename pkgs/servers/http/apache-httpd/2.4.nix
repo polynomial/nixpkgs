@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv
+{ stdenv, fetchFromGitHub, perl, zlib, apr, aprutil, pcre, libiconv
+, autoconf, which, expat # for apache build
+, subversion, python, libtool # for apr
 , proxySupport ? true
 , sslSupport ? true, openssl
 , http2Support ? true, nghttp2
@@ -19,21 +21,32 @@ stdenv.mkDerivation rec {
   version = "2.4.25";
   name = "apache-httpd-${version}";
 
-  src = fetchurl {
-    url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "1cl0bkqg6srb1sypga0cn8dcmdyxldavij73zmmkxvlz3kgw4zpq";
+  src = fetchFromGitHub {
+    rev = "c86718e47782449331f0f181c05f086a8985bee1";
+    owner = "polynomial";
+    repo = "httpd";
+    sha256 = "1b2xkirn0phqjgbv2yvxn107ss65i3zb7gfnsbpk793izkdi6y3y";
   };
 
   # FIXME: -dev depends on -doc
   outputs = [ "out" "dev" "doc" ];
   setOutputFlags = false; # it would move $out/modules, etc.
 
-  buildInputs = [perl] ++
-    optional sslSupport openssl ++
-    optional ldapSupport openldap ++    # there is no --with-ldap flag
-    optional libxml2Support libxml2 ++
-    optional http2Support nghttp2 ++
-    optional stdenv.isDarwin libiconv;
+  buildInputs = [
+    autoconf
+    which
+    expat
+    pcre
+    subversion
+    python
+    libtool
+    perl
+    ] ++
+      optional sslSupport openssl ++
+      optional ldapSupport openldap ++    # there is no --with-ldap flag
+      optional libxml2Support libxml2 ++
+      optional http2Support nghttp2 ++
+      optional stdenv.isDarwin libiconv;
 
   patchPhase = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
@@ -43,11 +56,14 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
   preConfigure = ''
+    svn co http://svn.apache.org/repos/asf/apr/apr/trunk srclib/apr
+    ./buildconf
     configureFlags="$configureFlags --includedir=$dev/include"
   '';
+    #--with-apr=${apr.dev}
+    #--with-apr-util=${aprutil.dev}
   configureFlags = ''
-    --with-apr=${apr.dev}
-    --with-apr-util=${aprutil.dev}
+    --with-included-apr
     --with-z=${zlib.dev}
     --with-pcre=${pcre.dev}
     --disable-maintainer-mode

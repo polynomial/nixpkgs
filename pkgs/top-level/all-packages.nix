@@ -6132,11 +6132,11 @@ with pkgs;
     erlangR20 erlangR20_odbc erlangR20_javac erlangR20_odbc_javac;
 
   inherit (beam.packages.erlang)
-    dalmatinerdb rebar rebar3-open rebar3
+    rebar rebar3-open rebar3
     hexRegistrySnapshot fetchHex beamPackages
     hex2nix cuter;
 
-  inherit (beam.packages.erlangR18) relxExe;
+  inherit (beam.packages.erlangR18) dalmatinerdb relxExe;
 
   groovy = callPackage ../development/interpreters/groovy { };
 

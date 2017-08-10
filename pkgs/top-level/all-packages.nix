@@ -6132,7 +6132,7 @@ with pkgs;
     erlangR20 erlangR20_odbc erlangR20_javac erlangR20_odbc_javac;
 
   inherit (beam.packages.erlang)
-    rebar rebar3-open rebar3
+    dalmatinerdb rebar rebar3-open rebar3
     hexRegistrySnapshot fetchHex beamPackages
     hex2nix cuter;
 

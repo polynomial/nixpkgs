@@ -61,6 +61,7 @@ let
         hex = callPackage ./hex {};
         webdriver = callPackage ./webdriver {};
 
+        dalmatinerdb = callPackage ../tools/erlang/dalmatinerdb {};
         hex2nix = callPackage ../tools/erlang/hex2nix {};
         cuter = callPackage ../tools/erlang/cuter {};
         relxExe = callPackage ../tools/erlang/relx-exe {};

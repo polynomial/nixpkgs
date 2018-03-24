@@ -5026,6 +5026,11 @@
     githubId = 11365056;
     name = "Kevin Liu";
   };
+  polynomial = {
+    email = "polynomial+nix@gmail.com";
+    github = "polynomial";
+    name = "Benjamin Smith";
+  };
   polyrod = {
     email = "dc1mdp@gmail.com";
     github = "polyrod";

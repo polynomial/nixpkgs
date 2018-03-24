@@ -2150,6 +2150,8 @@ in
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
+  carbon-relay-ng = callPackage ../servers/monitoring/graphite-ng/carbon-relay-ng { };
+
   caudec = callPackage ../applications/audio/caudec { };
 
   ccd2iso = callPackage ../tools/cd-dvd/ccd2iso { };

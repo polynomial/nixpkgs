@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, gtk2, gettext, bzip2, zlib
 , withGimpPlugin ? true, gimp ? null
-, libjpeg, libtiff, cfitsio, exiv2, lcms2, gtkimageview, lensfun }:
+, libjpeg, libtiff, cfitsio, exiv2, lcms2, gtkimageview }:
 
 assert withGimpPlugin -> gimp != null;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [
     gtk2 gtkimageview bzip2 zlib
-    libjpeg libtiff cfitsio exiv2 lcms2 lensfun
+    libjpeg libtiff cfitsio exiv2 lcms2
   ] ++ stdenv.lib.optional withGimpPlugin gimp;
 
   configureFlags = [

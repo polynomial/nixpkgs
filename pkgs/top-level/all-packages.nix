@@ -9821,6 +9821,9 @@ in
   apacheKafka_2_3 = callPackage ../servers/apache-kafka { majorVersion = "2.3"; };
   apacheKafka_2_4 = callPackage ../servers/apache-kafka { majorVersion = "2.4"; };
 
+  apacheFlume = apacheFlume_1_9_0;
+  apacheFlume_1_9_0 = callPackage ../servers/apache-flume { majorVersion = "1.9.0"; };
+
   kt = callPackage ../tools/misc/kt {};
 
   argbash = callPackage ../development/tools/misc/argbash {};

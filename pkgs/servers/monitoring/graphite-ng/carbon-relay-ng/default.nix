@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "carbon-relay-ng-${version}";
-  version = "0.9.4";
+  version = "0.11.0";
   goPackagePath = "github.com/graphite-ng/carbon-relay-ng";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "graphite-ng";
     repo = "carbon-relay-ng";
     rev = "v${version}";
-    sha256 = "0nf5gq6jyp3v80ngqp1jfk26d1fm617sqnk78qnn25rjnd0lm2hr";
+    sha256 = "19wk8zmc361rllyw3h09m41nn73zqk0w2nn7az2skfca3j5hwwmi";
   };
 
   meta = with stdenv.lib; {

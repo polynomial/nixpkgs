@@ -506,7 +506,6 @@
   ./services/monitoring/grafana.nix
   ./services/monitoring/grafana-reporter.nix
   ./services/monitoring/graphite.nix
-  ./services/monitoring/graphite-ng.nix
   ./services/monitoring/hdaps.nix
   ./services/monitoring/heapster.nix
   ./services/monitoring/incron.nix

@@ -9,26 +9,26 @@
 }:
 let
   pname = "cursor";
-  version = "0.45.14";
+  version = "0.47.9";
 
   inherit (stdenvNoCC) hostPlatform;
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.14-build-250219jnihavxsz-x86_64.AppImage";
-      hash = "sha256-5MGWJi8TP+13jZf6YMMUU5uYY/3OBTFxtGpirvgj8ZI=";
+      url = "https://downloads.cursor.com/production/b6fb41b5f36bda05cab7109606e7404a65d1ff32/linux/x64/Cursor-0.47.9-x86_64.AppImage";
+      hash = "sha256-L0ZODGHmO8SDhqrnkq7jwi30c6l+/ESj+FXHVKghsfc=";
     };
     aarch64-linux = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.45.14-build-250219jnihavxsz-arm64.AppImage";
-      hash = "sha256-8OUlPuPNgqbGe2x7gG+m3n3u6UDvgnVekkjJ08pVORs=";
+      url = "https://downloads.cursor.com/production/b6fb41b5f36bda05cab7109606e7404a65d1ff32/linux/arm64/Cursor-0.47.9-aarch64.AppImage";
+      hash = "sha256-OhaKujLXt06DL43fY5vRaGZe3p8Y1mt22y5OrzM3mMk=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.14%20-%20Build%20250219jnihavxsz-x64.dmg";
-      hash = "sha256-NyDY74PZjSjpuTSVaO/l9adPcLX1kytyrFGQjJ/8WcQ=";
+      url = "https://downloads.cursor.com/production/82ef0f61c01d079d1b7e5ab04d88499d5af500e3/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-T5N8b/6HexQ2ZchWUb9CL3t9ks93O9WJgrDtxfE1SgU=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://download.todesktop.com/230313mzl4w4u92/Cursor%200.45.14%20-%20Build%20250219jnihavxsz-arm64.dmg";
-      hash = "sha256-A503TxDDFENqMnc1hy/lMMyIgC7YwwRYPJy+tp649Eg=";
+      url = "https://downloads.cursor.com/production/82ef0f61c01d079d1b7e5ab04d88499d5af500e3/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-ycroylfEZY/KfRiXvfOuTdyyglbg/J7DU12u6Xrsk0s=";
     };
   };
 
@@ -64,17 +64,18 @@ stdenvNoCC.mkDerivation {
 
   installPhase = ''
     runHook preInstall
+    echo "hello"
     mkdir -p $out/
 
     ${lib.optionalString hostPlatform.isLinux ''
       cp -r bin $out/bin
       mkdir -p $out/share/cursor
-      cp -a ${appimageContents}/locales $out/share/cursor
-      cp -a ${appimageContents}/resources $out/share/cursor
+      cp -a ${appimageContents}/usr/share/cursor/locales $out/share/cursor
+      cp -a ${appimageContents}/usr/share/cursor/resources $out/share/cursor
       cp -a ${appimageContents}/usr/share/icons $out/share/
       install -Dm 644 ${appimageContents}/cursor.desktop -t $out/share/applications/
 
-      substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
+      #substituteInPlace $out/share/applications/cursor.desktop --replace-fail "AppRun" "cursor"
 
       wrapProgram $out/bin/cursor \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}} --no-update"
@@ -102,6 +103,7 @@ stdenvNoCC.mkDerivation {
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl jq coreutils gnused trurl common-updater-scripts
       set -eu -o pipefail
+      set -x
 
       baseUrl="https://www.cursor.com/api/download"
 
@@ -113,10 +115,6 @@ stdenvNoCC.mkDerivation {
 
       if [[ "$linuxVersion" != "$currentVersion" ]]; then
           darwinVersion="$(echo "$latestDarwin" | jq -r .version)"
-          if [ "$linuxVersion" != "$darwinVersion" ]; then
-              echo "Linux version ($linuxVersion) and Darwin version ($darwinVersion) do not match"
-              exit 1
-          fi
           version="$linuxVersion"
 
           # For each platform, get the download URL directly from the API
